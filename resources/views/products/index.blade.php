@@ -1,8 +1,8 @@
-extends("layouts.app")
+@extends("layouts.app")
 @section("content")
 <div class="row">
     <div class="col-md-4 col-lg-3  mb-4">
-        <form class="card mb-4" action="/" method="get">
+        <form class="card mb-4" action="{{ route('top') }}" method="get">
             <div class="card-header">商品検索</div>
             <dl class="search-box card-body mb-0">
                 <dt>カテゴリ</dt>
@@ -55,7 +55,7 @@ extends("layouts.app")
                 <tbody>
                     @foreach ($products as $product)
                     <tr>
-                        <td><a href="{{ route('products.edit', $product) }}">{{ $product->id }}</a></td>
+                        <td><a href="{{ route('edit', $product) }}">{{ $product->id }}</a></td>
                         <td>{{ $product->category->name }}</td>
                         <td>{{ $product->maker }}</td>
                         <td>{{ $product->name }}</td>

@@ -12,13 +12,45 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::paginate(20);
+
         // dd(
         //     Product::get(),
         //     Product::paginate(20),
         // );
+        $query = Product::select('id','category_id', 'name', 'maker','price');
+
+        if ($request->category_id) {
+            $query->where('category_id', '=', $request->category_id);
+        }
+
+        if ($request->keyword) {
+            $query->where('name', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('maker', 'LIKE', '%' . $request->keyword . '%');
+        }
+
+        if ($request->min_price && !$request->max_price) {
+            $query->where('price', '>=', $request->min_price);
+        } else if (!$request->min_price && $request->max_price) {
+            $query->where('price', '<=', $request->max_price);
+        } else if ($request->min_price && $request->max_price) {
+            $query->where('price', '>=', $request->min_price)
+                ->where('price', '<=', $request->max_price);
+        }
+
+        if ($request->sort == '') {
+            $query->orderby('created_at', 'desc');
+        } else if ($request->sort == 'price_asc') {
+            $query->orderby('price', 'asc');
+        } else if ($request->sort == 'price_desc') {
+            $query->orderby('price', 'desc');
+        }
+
+        $products = $query->get();
+
+        $products = $query->paginate(20);
+
         $data = [
             "products" => $products,
         ];
@@ -89,5 +121,42 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function search(Request $request){
+
+        // $query = Product::select('category_id','name', 'price');
+
+        // if($request->category_id){
+        //     $query->where('category_id', '=', $request->category_id);
+        // }
+
+        // if($request->keyword){
+        //     $query->where('name','LIKE','%'.$request->keyword. '%');
+        // }
+
+        // if($request->min_price && !$request->max_price){
+        //     $query->where('price', '>=', $request->min_price);
+        // }
+        // else if (!$request->min_price && $request->max_price) {
+        //     $query->where('price', '<=', $request->max_price);
+        // }
+        // else if($request->min_price && $request->max_price) {
+        //     $query->where('price', '>=', $request->min_price)
+        //         ->where('price', '<=', $request->max_price);
+        // }
+
+        // if($request->sort == ''){
+        //     $query->orderby('created_at', 'desc');
+        // }
+        // else if($request->sort == 'price_asc'){
+        //     $query->orderby('price','asc');
+        // }
+        // else if($request->sort == 'price_desc'){
+        //     $query->orderby('price','desc');
+        // }
+
+        // $product = $query->get();
+
     }
 }
