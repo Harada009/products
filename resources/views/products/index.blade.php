@@ -39,7 +39,7 @@
                 <button type="submit" class="btn w-100 btn-success">検索</button>
             </div>
         </form>
-        <form onsubmit="return confirm('ログアウトしますか？')" action="{{-- {{ route('logout') }} --}}" method="post">
+        <form onsubmit="return confirm('ログアウトしますか？')" action="{{ route('logout') }}" method="post">
             @csrf
             <button type="submit" class="btn btn-sm btn-dark">ログアウト</button>
         </form>
@@ -61,11 +61,21 @@
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->price }}</td>
                         <td>{{ Carbon\Carbon::parse($product->created_at)->format('Y年m月d日') }}</td>
+                        <td>
+                            <form onsubmit=" return confirm('本当に削除しますか？')" action="{{route('destroy',$product) }}" method="post">
+                                @csrf
+                                @method('delete')
+                                <button type="submit">削除</button>
+                           </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
+        <form action="{{ route('create') }}">
+            <button type="submit">追加</button>
+        </form>
         {{ $products->appends(Request::all())->links() }}
     </div>
 </div>

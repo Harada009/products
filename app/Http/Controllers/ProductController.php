@@ -64,7 +64,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $product = new Product();
+        $data = ['product' => $product];
+        return view('products.create',$data);
     }
 
     /**
@@ -75,7 +77,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'category_id' => 'required',
+            'maker' => 'required|max:50',
+            'name' => 'required|max:50',
+            'price' => 'required|max:50',
+        ]);
+        $product = new Product();
+        $product->category_id = $request->category_id;
+        $product->maker = $request->maker;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->save();
+
+        return redirect()->route('top');
     }
 
     /**
@@ -97,7 +112,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $data = ['product' => $product];
+        return view('products.edit',$data);
     }
 
     /**
@@ -109,7 +125,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $this->validate($request, [
+            'category_id' => 'required',
+            'maker' => 'required|max:50',
+            'name' => 'required|max:50',
+            'price' => 'required|max:50',
+        ]);
+        $product->category_id = $request->category_id;
+        $product->maker = $request->maker;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->save();
+        return redirect(route('top', $product));
     }
 
     /**
@@ -120,7 +147,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return redirect(route('top'));
     }
 
     public function search(Request $request){

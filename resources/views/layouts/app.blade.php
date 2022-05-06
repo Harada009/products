@@ -13,7 +13,9 @@
 <body>
 <header class="navbar navbar-dark bg-dark">
     <div class="container">
-        <a href="/" class="navbar-brand">{{ config("app.name") }}</a>
+        <a href="/home" class="navbar-brand">{{ config("app.name") }}</a>
+        <a href="{{ route('register') }}">会員登録</a>
+        <a href="{{ route('login') }}">ログイン</a>
     </div>
 </header>
     <div class="container py-4">
